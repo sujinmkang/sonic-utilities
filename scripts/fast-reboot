@@ -538,6 +538,12 @@ if [ -x ${DEVPATH}/${PLATFORM}/${PLATFORM_PLUGIN} ]; then
     ${DEVPATH}/${PLATFORM}/${PLATFORM_PLUGIN}
 fi
 
+# Enable Watchdog Timer
+if [[ -x /usr/bin/watchdog ]]; then
+    debug "Enabling Watchdog before ${REBOOT_TYPE}"
+    /usr/bin/watchdog -e
+fi
+
 # Reboot: explicity call Linux native reboot under sbin
 debug "Rebooting with ${REBOOT_METHOD} to ${NEXT_SONIC_IMAGE} ..."
 exec ${REBOOT_METHOD}

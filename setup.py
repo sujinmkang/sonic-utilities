@@ -100,6 +100,7 @@ setup(
         'scripts/tempershow',
         'scripts/update_json.py',
         'scripts/warm-reboot',
+        'scripts/watchdog',
         'scripts/watermarkstat',
         'scripts/watermarkcfg',
         'scripts/sonic-kdump-config'

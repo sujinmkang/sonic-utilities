@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import getopt
+try:
+    from sonic_platform.watchdog import Watchdog
+except:
+    print "sonic_platform.watchdog is not available"
+    sys.exit(-1)
+
+VERBOSE=no
+
+function debug()
+{
+    if [[ x"${VERBOSE}" == x"yes" ]]; then
+        echo "$date $@"
+    fi
+    logger "$@"
+}
+
+function disable_watchdog()
+{
+    debug "Disabling Watchdog..."
+    wd=Watchdog()
+    wd.disarm()
+}
+
+function enable_watchdog()
+{
+    debug "Enabling Watchdog..."
+    wd=Watchdog()
+    wd.arm(30)
+}
+
+def usage():
+    print "Usage", sys.argv[0], "[options]"
+    print "    Request Enabling/Disabling Watchdog. Invoke platform-specific tool when available."
+    print " "
+    print "    Available options:"
+    print "        -h, -? : getting this help"
+    print "        -e     : enabling platform hw watchdog"
+    print "        -d     : disabling platform hw watchdog"
+    sys.exit(-1)
+
+def main(argv):
+    try:
+        opts, argv = getopt.getopt(sys.argv[1:], "e:d:v", ['enable','disable','verbose'])
+    except getopt.GetoptError:
+        usage()
+
+    for opt, arg in opts:
+        if opt in ("-e", "--enable"):
+            enable_watchdog(arg)
+	elif opt in ("-d", "--disable"):
+            disable_watchdog()
+        elif opt in ("-v", "--verbose"):
+            VERBOSE = "yes"
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
+
